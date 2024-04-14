@@ -34,9 +34,9 @@ const InboxPage = () => {
   );
 
   const {
+    sendRequest: fetchInboxMails,
     isLoading,
     error,
-    sendRequest: fetchInboxMails,
   } = useHttpRequest(dispatchInboxMails);
 
   useEffect(() => {

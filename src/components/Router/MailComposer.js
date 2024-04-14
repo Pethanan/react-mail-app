@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, EditorState, convertFromRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Button, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { mailsSliceActions } from "../../store/mailsSlice";

@@ -4,7 +4,6 @@ import Modal from "../UI/Modal";
 import classes from "./SignUpForm.module.css";
 
 const SignupForm = (props) => {
-  const [openSignUpModal, setOpenSignUpModal] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPwdValid, setIsPwdValid] = useState(false);
   const [isConfirmPwdValid, setIsConfirmPwdValid] = useState(false);
@@ -57,20 +56,12 @@ const SignupForm = (props) => {
       const idToken = !!signupAuthResponse.idToken;
       console.log(idToken);
       if (idToken) {
-        setOpenSignUpModal(true);
-        setTimeout(() => {
-          setOpenSignUpModal(false);
-        }, 5000);
+        alert("Account created successfully");
       }
     }
     emailRef.current.value = "";
     pwdRef.current.value = "";
     confirmPwdRef.current.value = "";
-  };
-
-  const signUpModalCloseHandler = () => {
-    console.log("modal closer clicked");
-    setOpenSignUpModal(false);
   };
 
   return (
@@ -173,15 +164,6 @@ const SignupForm = (props) => {
             </Button>
           </Container>
         </Form>
-      </Container>
-      <Container>
-        {openSignUpModal && (
-          <Modal signUpModalCloseHandler={signUpModalCloseHandler}>
-            <Container>
-              <h3>SignUp successful</h3>
-            </Container>
-          </Modal>
-        )}
       </Container>
     </>
   );
