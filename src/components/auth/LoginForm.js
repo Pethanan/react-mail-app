@@ -1,8 +1,10 @@
-import React, { useContext, useRef, useState } from "react";
-import { Button, Col, Form, Row, Container } from "react-bootstrap";
-import { Redirect } from "react-router-dom";
+// LoginForm.js
+
+import React, { useRef } from "react";
+import { Button, Form, Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/authSlice";
+import classes from "./LoginForm.module.css";
 
 const LoginForm = (props) => {
   const emailRef = useRef(null);
@@ -15,7 +17,7 @@ const LoginForm = (props) => {
     const enteredPwd = pwdRef.current.value;
 
     const authResponse = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB0gvu4DcaKZpcr5ICbUE_wucAVfXNp96s",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC4Fw8h_EULUmTEFSKu78R6XXnVSFnqtLc",
       {
         method: "POST",
         body: JSON.stringify({
@@ -36,88 +38,47 @@ const LoginForm = (props) => {
       console.log(authData.idToken);
       const payLoad = { mailId: enteredMailId, token: authData.idToken };
       dispatch(authActions.login(payLoad));
-      alert("Login succesful!");
+      alert("Login successful!");
     } else {
-      alert("Login was not succesful, pls try again with valid credentials");
+      alert(
+        "Login was not successful, please try again with valid credentials"
+      );
     }
   };
 
   return (
-    <Container
-      style={{
-        margin: "0 auto",
-        marginTop: "130px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
-      <Container
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+    <>
+      <h1 className={classes["header"]}>Welcome to Peth Mails!</h1>
+      <Container className={classes["login-container"]}>
         <Form
           onSubmit={loginAuthSubmitHandler}
-          style={{
-            width: "30%",
-            padding: "40px",
-            backgroundColor: "#33FFAD",
-            padding: "50px",
-            borderRadius: "15px",
-          }}
+          className={classes["login-form"]}
         >
-          <Container
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: "60px",
-            }}
-          >
-            <h4>Login Here</h4>
-          </Container>
-
+          <h4>Login Here</h4>
           <Form.Control
-            style={{ marginTop: "30px" }}
-            placeholder="email"
-            type="mail"
+            className={classes["login-input"]}
+            placeholder="Email"
+            type="email"
             ref={emailRef}
-          ></Form.Control>
+          />
           <Form.Control
-            style={{ marginTop: "30px" }}
-            placeholder="password"
+            className={classes["login-input"]}
+            placeholder="Password"
             type="password"
             ref={pwdRef}
-          ></Form.Control>
-          <Container style={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              type="submit"
-              style={{
-                marginTop: "35px",
-                backgroundColor: "#0B5D3C",
-                border: "none",
-              }}
-            >
-              Login
-            </Button>
-          </Container>
+          />
+          <button type="submit" className={classes["login-button"]}>
+            Login
+          </button>
         </Form>
-      </Container>
-      <Container style={{ display: "flex", justifyContent: "center" }}>
-        <Button
+        <button
           onClick={props.switchToSignupHandler}
-          style={{
-            backgroundColor: "#0F8B59",
-            margin: "50px 0",
-            border: "none",
-          }}
+          className={classes["signup-button"]}
         >
           Click here to Sign up
-        </Button>
+        </button>
       </Container>
-    </Container>
+    </>
   );
 };
 

@@ -1,0 +1,21 @@
+.sent-mails-table {
+  width: 100%;
+}
+
+.sent-mails-table th,
+.sent-mails-table td {
+  padding: 12px;
+}
+
+.sent-mails-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.sent-mails-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.sent-mails-table tbody tr:hover {
+  background-color: #ddd;
+}

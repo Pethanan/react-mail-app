@@ -4,7 +4,7 @@ export const fetchFromDB = (mailId) => {
       const dataStorePoint = mailId.replace("@", "").replace(".", "");
 
       const response = await fetch(
-        `https://ecommerce---online-shopping-default-rtdb.firebaseio.com/mails/${dataStorePoint}/mails.json`,
+        `https://peth-mail-app-default-rtdb.firebaseio.com/${dataStorePoint}/mails.json`,
         {
           method: "PUT",
           body: JSON.stringify({

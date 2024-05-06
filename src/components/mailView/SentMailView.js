@@ -1,44 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Container, ListGroup, ListGroupItem } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import HTMLToDraft from "html-to-draftjs";
 import { ContentState } from "react-draft-wysiwyg";
 import { EditorState } from "draft-js";
 import { Editor } from "draft-js";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { mailsSliceActions } from "../../store/mailsSlice";
-import SideNavBar from "./SideNavBar";
+import SideNavBar from "../../layout/SideNavBar";
 
-const InboxMailView = (props) => {
+const SentMailView = (props) => {
   const mail_key = useParams().mail_key;
   const dispatch = useDispatch();
-  const inbox = useSelector((state) => state.mails.inbox);
-
-  const userDataEndPoint = useSelector((state) => state.auth.mailId)
+  const sentMails = useSelector((state) => state.mails.sentMails);
+  console.log(sentMails);
+  const userMailIdToDirectory = useSelector((state) => state.auth.mailId)
     .replace("@", "")
     .replace(".", "");
 
-  const mailOnFocus = inbox.find((mail) => mail.key === mail_key);
+  const mailOnFocus = sentMails.find((mail) => mail.key === mail_key);
   console.log(mailOnFocus.subject);
-
-  useEffect(() => {
-    const patchViewedProp = async () => {
-      const response = await fetch(
-        `https://ecommerce---online-shopping-default-rtdb.firebaseio.com/mails/${userDataEndPoint}/inbox/${mailOnFocus.key}.json`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({ viewed: true }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const responseData = await response.json();
-      dispatch(mailsSliceActions.replaceMailItem(mailOnFocus.key));
-    };
-    patchViewedProp();
-  }, []);
 
   return (
     <div
@@ -96,4 +77,4 @@ const InboxMailView = (props) => {
   );
 };
 
-export default InboxMailView;
+export default SentMailView;

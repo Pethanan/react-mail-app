@@ -1,0 +1,9 @@
+.inbox-mail-item.unviewed {
+  background-color: #6fbfbf;
+  font-weight: bold;
+}
+
+.inbox-mail-item.unviewed:hover {
+  background-color: #5aafaf;
+  color: #444444;
+}

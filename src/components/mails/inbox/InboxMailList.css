@@ -1,0 +1,18 @@
+.inbox-table {
+  width: 100%;
+}
+
+.inbox-table th,
+.inbox-table td {
+  padding: 12px;
+}
+
+.inbox-table th {
+  background-color: #008080 !important;
+  color: white;
+  text-align: left;
+}
+
+.inbox-table tbody tr:hover {
+  background-color: #ddd;
+}

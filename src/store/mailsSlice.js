@@ -6,7 +6,6 @@ const mailsInitialState = {
   inboxTotalMails: 0,
   inboxUnReadMails: 0,
   sentMails: [],
-
   changed: false,
 };
 
@@ -94,6 +93,15 @@ const mailsSlice = createSlice({
       state.sentMails = state.sentMails.filter(
         (mail) => mail.key !== action.payload.key
       );
+    },
+    clearMailsOnLogout(state) {
+      return {
+        ...state,
+        inbox: [],
+        inboxTotalMails: 0,
+        inboxUnReadMails: 0,
+        sentMails: [],
+      };
     },
   },
 });

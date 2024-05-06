@@ -1,0 +1,45 @@
+/* InboxPage.css */
+
+.sent-mail-box-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  height: 100vh;
+}
+
+.sent-mails-header {
+  padding: 20px 0 20px 15px;
+  font-weight: bolder;
+  text-align: center;
+  background-color: #018c7a;
+  color: white;
+}
+.delete-button {
+  margin-top: 10px;
+}
+
+.mail-box-container {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  height: 200px;
+  margin: 0 0;
+  height: 100vh;
+}
+.table-container {
+  padding: 0 !important;
+}
+.table-container table td:nth-child(2) {
+  width: 55%;
+}
+
+.sent-mails-header {
+  background-color: #009688; /* Dark teal */
+  color: white;
+  padding: 20px;
+}

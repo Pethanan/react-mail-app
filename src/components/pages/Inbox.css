@@ -1,0 +1,79 @@
+.inbox-page {
+  width: 100%;
+  position: fixed;
+  height: 100vh;
+  background-color: #ace6e6;
+  overflow: hidden;
+}
+
+.inbox-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  height: 100vh;
+}
+
+.inbox-header {
+  padding: 20px 0 20px 15px;
+  font-weight: bolder;
+  text-align: center;
+  background-color: #004d4d !important;
+  color: white;
+}
+
+.inbox-mails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.mail-item {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.mail-link {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sender,
+.subject {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete-button {
+  margin-top: 10px;
+}
+
+.mail-box-container {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  height: 200px;
+  margin: 0 0;
+  height: 100vh;
+}
+.table-container {
+  padding: 0 !important;
+}
+.table-container table td:nth-child(2) {
+  width: 55% !important;
+}
+
+.inbox-header {
+  background-color: #009688; /* Dark teal */
+  color: white;
+  padding: 20px;
+}

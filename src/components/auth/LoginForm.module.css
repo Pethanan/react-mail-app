@@ -1,0 +1,54 @@
+/* LoginForm.module.css */
+
+.header {
+  font-size: 2rem;
+  margin-top: 30px; /* Adjust margin-top as needed */
+  margin-bottom: 20px;
+  color: #333; /* Change font color to a darker shade */
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.login-container {
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(45deg, #33ffad, #28a76e);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  width: 300px;
+  padding: 20px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Semi-transparent white background */
+  border-radius: 15px;
+}
+
+.login-input {
+  margin-top: 15px;
+}
+
+.login-button,
+.signup-button {
+  margin-top: 20px;
+  background-color: #0b5d3c;
+  padding: 5px 12px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover,
+.signup-button:hover {
+  background-color: #0a4c31;
+}

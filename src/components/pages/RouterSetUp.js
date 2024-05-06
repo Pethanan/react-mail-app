@@ -3,25 +3,23 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import AuthForm from "../auth/AuthForm";
 import { useSelector } from "react-redux";
 
-import MailComposer from "./MailComposer";
+import MailComposerPage from "../mails/MailComposer";
 import InboxPage from "./Inbox";
-import MailView from "./SentMailView";
 import SentMailsPage from "./SentMails";
-import InboxMailView from "./InboxMailView";
-import SentMailView from "./SentMailView";
+import InboxMailView from "../mailView/InboxMailView";
+import SentMailView from "../mailView/SentMailView";
 
 const RouterSetUp = () => {
   const isLoggedin = useSelector((state) => state.auth.isLoggedin);
 
   return (
     <Switch>
-      <Route path="/mailCompose" exact>
-        <MailComposer />
-      </Route>
-
       <Route path="/" exact>
         <AuthForm></AuthForm>
         {isLoggedin && <Redirect to="/inbox"></Redirect>}
+      </Route>
+      <Route path="/mailCompose" exact>
+        <MailComposerPage />
       </Route>
       <Route path="/inbox" exact>
         {isLoggedin && <InboxPage />}

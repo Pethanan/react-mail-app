@@ -13,8 +13,6 @@ const MailComposer = () => {
   const editorState = EditorState.createEmpty();
   const [mainContentState, setMainContentState] = useState(editorState);
   const [content, setContent] = useState("");
-  // const [mailContentConvertedToHTML, setMailContentConvertedToHTML] =
-  //   useState("");
 
   const mailId = useSelector((state) => state.auth.mailId);
   const dispatch = useDispatch();
@@ -39,55 +37,66 @@ const MailComposer = () => {
       content,
     });
   };
-
   const sendMail = async (e) => {
     e.preventDefault();
-    console.log(mail);
-    const mailObj = {
-      ...mail,
-      content: content,
-      viewed: false,
-    };
-    console.log(mailObj);
+    try {
+      const mailObj = {
+        ...mail,
+        content: content,
+        viewed: false,
+      };
 
-    const mailObjStringified = JSON.stringify(mailObj);
-    const RecvrMailIdToDirectory = mail.receiver
-      .replace("@", "")
-      .replace(".", "");
-    const responseFromReceiverDB = await fetch(
-      `https://ecommerce---online-shopping-default-rtdb.firebaseio.com/mails/${RecvrMailIdToDirectory}/inbox.json`,
-      {
-        method: "POST",
-        body: mailObjStringified,
-        headers: { "Content-type": "application/json" },
+      const mailObjStringified = JSON.stringify(mailObj);
+      const recvrMailIdToDirectory = mail.receiver.replace(/[@.]/g, "");
+
+      console.log(recvrMailIdToDirectory);
+      const responseFromReceiverDB = await fetch(
+        `https://peth-mail-app-default-rtdb.firebaseio.com/${recvrMailIdToDirectory}/inbox.json`,
+        {
+          method: "POST",
+          body: mailObjStringified,
+          headers: { "Content-type": "application/json" },
+        }
+      );
+
+      if (!responseFromReceiverDB.ok) {
+        throw new Error("Failed to send mail to receiver.");
       }
-    );
 
-    const SenderMailIdToDirectory = mailId.replace("@", "").replace(".", "");
+      console.log(await responseFromReceiverDB.json());
 
-    const responseFromSenderDB = await fetch(
-      `https://ecommerce---online-shopping-default-rtdb.firebaseio.com/mails/${SenderMailIdToDirectory}/sentMails.json`,
-      {
-        method: "POST",
-        body: mailObjStringified, // content: mailContent,
-        headers: { "Content-Type": "application/json" },
+      const SenderMailIdToDirectory = mailId.replace("@", "").replace(".", "");
+
+      const responseFromSenderDB = await fetch(
+        `https://peth-mail-app-default-rtdb.firebaseio.com/${SenderMailIdToDirectory}/sentMails.json`,
+        {
+          method: "POST",
+          body: mailObjStringified,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!responseFromSenderDB.ok) {
+        throw new Error("Failed to save mail in sent folder.");
       }
-    );
 
-    const response = await responseFromSenderDB.json();
+      const response = await responseFromSenderDB.json();
+      console.log(response);
 
-    const mailwithNameKey = { ...mailObj, key: response.name };
-    dispatch(mailsSliceActions.addSentItem(mailwithNameKey));
+      const mailwithNameKey = { ...mailObj, key: response.name };
+      dispatch(mailsSliceActions.addSentItem(mailwithNameKey));
 
-    setMail({ receiver: "", subject: "" });
-    const clearEditorState = EditorState.createEmpty();
-    setMainContentState(clearEditorState);
-    setLoading(false);
-    setTimeout(() => {
-      setLoading(true);
-    }, 2500);
+      setMail({ receiver: "", subject: "" });
+      const clearEditorState = EditorState.createEmpty();
+      setMainContentState(clearEditorState);
+      setLoading(false);
+      setTimeout(() => {
+        setLoading(true);
+      }, 2500);
+    } catch (error) {
+      console.error("Error sending mail:", error.message);
+    }
   };
-
   return (
     <Form onSubmit={sendMail} style={{ margin: "50px" }}>
       <h4 style={{ margin: "35px 0" }}>Compose Mail</h4>
