@@ -19,3 +19,6 @@
 .sent-mails-table tbody tr:hover {
   background-color: #ddd;
 }
+.sent-mails-table thead tr {
+  height: 52px;
+}

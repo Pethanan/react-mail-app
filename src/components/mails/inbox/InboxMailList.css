@@ -2,6 +2,9 @@
   width: 100%;
 }
 
+.inbox-table thead tr {
+  height: 52px;
+}
 .inbox-table th,
 .inbox-table td {
   padding: 12px;

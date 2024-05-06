@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import AuthForm from "../auth/AuthForm";
+import { BrowserRouter as Router } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "react-redux";
 
 import MailComposerPage from "../mails/MailComposer";
@@ -8,36 +8,46 @@ import InboxPage from "./Inbox";
 import SentMailsPage from "./SentMails";
 import InboxMailView from "../mailView/InboxMailView";
 import SentMailView from "../mailView/SentMailView";
+import Login from "../auth/Login";
+import Signup from "../auth/Signup";
+import MailView from "../mailView/MailView";
 
 const RouterSetUp = () => {
   const isLoggedin = useSelector((state) => state.auth.isLoggedin);
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        <AuthForm></AuthForm>
-        {isLoggedin && <Redirect to="/inbox"></Redirect>}
-      </Route>
-      <Route path="/mailCompose" exact>
-        <MailComposerPage />
-      </Route>
-      <Route path="/inbox" exact>
-        {isLoggedin && <InboxPage />}
-        {!isLoggedin && <Redirect to="/" />}
-      </Route>
-      <Route path="/sentMails" exact>
-        <SentMailsPage />
-        {!isLoggedin && <Redirect to="/" />}
-      </Route>
-      <Route path="/inbox/:mail_key">
-        <InboxMailView />
-        {!isLoggedin && <Redirect to="/" />}
-      </Route>
-      <Route path="/sentMails/:mail_key">
-        <SentMailView />
-        {!isLoggedin && <Redirect to="/" />}
-      </Route>
-    </Switch>
+    <Router>
+      <Switch>
+        <Route path="/" exact>
+          {!isLoggedin && <Signup />}
+          {isLoggedin && <Redirect to="/inbox"></Redirect>}
+        </Route>
+        <Route path="/login">
+          {!isLoggedin && <Login />}
+          {isLoggedin && <Redirect to="/inbox"></Redirect>}
+        </Route>
+        <Route path="/mailCompose">
+          {!isLoggedin && <Redirect to="/login"></Redirect>}
+          {isLoggedin && <MailComposerPage />}
+        </Route>
+        <Route path="/inbox" exact>
+          {!isLoggedin && <Redirect to="/login" />}
+          {isLoggedin && <InboxPage />}
+        </Route>
+        <Route path="/sentMails" exact>
+          {!isLoggedin && <Redirect to="/login" />}
+          {isLoggedin && <SentMailsPage />}
+        </Route>
+        <Route path="/inbox/:mail_key">
+          {!isLoggedin && <Redirect to="/login" />}
+          {isLoggedin && <MailView mailCategory={"inbox"} />}
+        </Route>
+        <Route path="/sentMails/:mail_key">
+          {!isLoggedin && <Redirect to="/login" />}
+          {isLoggedin && <MailView mailCategory={"sentMails"} />}
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 

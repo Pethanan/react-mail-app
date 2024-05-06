@@ -1,12 +1,11 @@
-// LoginForm.js
-
 import React, { useRef } from "react";
 import { Button, Form, Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/authSlice";
-import classes from "./LoginForm.module.css";
+import classes from "./Login.module.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
-const LoginForm = (props) => {
+const Login = (props) => {
   const emailRef = useRef(null);
   const pwdRef = useRef(null);
   const dispatch = useDispatch();
@@ -71,15 +70,12 @@ const LoginForm = (props) => {
             Login
           </button>
         </Form>
-        <button
-          onClick={props.switchToSignupHandler}
-          className={classes["signup-button"]}
-        >
+        <Link className={classes.link} to="/">
           Click here to Sign up
-        </button>
+        </Link>
       </Container>
     </>
   );
 };
 
-export default LoginForm;
+export default Login;

@@ -7,3 +7,12 @@
   background-color: #5aafaf;
   color: #444444;
 }
+.link-to-mail {
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+}
+.link-to-mail:hover {
+  color: black;
+}

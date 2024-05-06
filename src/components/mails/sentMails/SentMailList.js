@@ -69,13 +69,16 @@ const SentMailList = () => {
             <td colSpan="3">No mails in inbox</td>
           </tr>
         ) : (
-          sentMails.map((mail) => (
-            <SentMailItem
-              key={mail.key}
-              mail={mail}
-              onDelete={() => mailDeleteHandler(mail)}
-            />
-          ))
+          sentMails
+            .slice()
+            .reverse()
+            .map((mail) => (
+              <SentMailItem
+                key={mail.key}
+                mail={mail}
+                onDelete={() => mailDeleteHandler(mail)}
+              />
+            ))
         )}
       </tbody>
     </Table>

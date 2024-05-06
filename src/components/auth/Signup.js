@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react";
 import { Form, Row, Col, Button, Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import classes from "./Signup.module.css";
 
-const SignupForm = (props) => {
+const Signup = (props) => {
   const mailId = useSelector((state) => state.auth.mailId);
   const dispatch = useDispatch();
 
@@ -103,108 +105,79 @@ const SignupForm = (props) => {
   };
 
   return (
-    <>
-      <Container
-        style={{ marginTop: "60px", display: "flex", justifyContent: "center" }}
-      >
-        <h5
-          style={{
-            marginTop: "0 auto",
-            textAlign: "center",
-            marginBottom: "65px",
-            fontWeight: "bolder",
-          }}
-        >
-          Create New Account/ Signup
-        </h5>
-      </Container>
-      <Container style={{ display: "flex", justifyContent: "center" }}>
-        <Form onSubmit={signUpFormSubmitHandler} style={{ width: "50%" }}>
-          <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-            <Form.Label column sm={3}>
-              Email
-            </Form.Label>
-            <Col sm={8}>
-              <Form.Control
-                type="mail"
-                placeholder="email"
-                ref={emailRef}
-                required
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="formHorizontalPassword"
-          >
-            <Form.Label column sm={3}>
-              Password
-            </Form.Label>
-            <Col sm={8}>
-              <Form.Control
-                type="password"
-                placeholder="password"
-                ref={pwdRef}
-                required
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="formHorizontalPassword"
-          >
-            <Form.Label column sm={3}>
-              Confirm Password
-            </Form.Label>
-            <Col sm={8}>
-              <Form.Control
-                type="password"
-                placeholder="re-enter password"
-                required
-                ref={confirmPwdRef}
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group
-            as={Row}
-            className="mb-3"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Col
-              sm={{ span: 10, offset: 0 }}
-              style={{ display: "flex", justifyContent: "center" }}
+    <div className={classes["signup-main"]}>
+      <header className={classes.header}>
+        <h1 className={classes["header-title"]}>Create New Account/Signup</h1>
+      </header>
+      <section className={classes["form-section"]}>
+        <Container className={classes["form-container"]}>
+          <Form onSubmit={signUpFormSubmitHandler} className={classes.form}>
+            <Form.Group
+              as={Row}
+              className="mb-3"
+              controlId="formHorizontalEmail"
             >
-              <Button
-                type="submit"
-                style={{
-                  marginTop: "35px",
-                  backgroundColor: "#0B5D3C",
-                  border: "none",
-                }}
-              >
-                Submit
-              </Button>
-            </Col>
-          </Form.Group>
-          <Container style={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              onClick={props.switchToLoginHandler}
-              style={{
-                backgroundColor: "#0F8B59",
-                margin: "50px 0",
-                border: "none",
-              }}
+              <Form.Label column sm={3}>
+                Email
+              </Form.Label>
+              <Col sm={8}>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter your email"
+                  ref={emailRef}
+                  required
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group
+              as={Row}
+              className="mb-3"
+              controlId="formHorizontalPassword"
             >
-              Click here to Login, if you are already an user
-            </Button>
-          </Container>
-        </Form>
-      </Container>
-    </>
+              <Form.Label column sm={3}>
+                Password
+              </Form.Label>
+              <Col sm={8}>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter your password"
+                  ref={pwdRef}
+                  required
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group
+              as={Row}
+              className="mb-3"
+              controlId="formHorizontalConfirmPassword"
+            >
+              <Form.Label column sm={3}>
+                Confirm Password
+              </Form.Label>
+              <Col sm={8}>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm your password"
+                  ref={confirmPwdRef}
+                  required
+                />
+              </Col>
+            </Form.Group>
+            <button type="submit" className={classes["submit-button"]}>
+              Submit
+            </button>
+          </Form>
+        </Container>
+      </section>
+      <footer className={classes.footer}>
+        <Container className={classes["footer-container"]}>
+          <Link to="/login" className={classes["login-link"]}>
+            Click here to Login, if you are already a user
+          </Link>
+        </Container>
+      </footer>
+    </div>
   );
 };
 
-export default SignupForm;
+export default Signup;

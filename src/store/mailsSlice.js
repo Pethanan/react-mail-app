@@ -72,14 +72,11 @@ const mailsSlice = createSlice({
       console.log(state.sentMails);
     },
 
-    replaceMailItem(state, action) {
-      console.log(action.payload);
+    updateMailViewedStatus(state, action) {
       const findIndex = state.inbox.findIndex(
         (mail) => mail.key === action.payload
       );
-      if (state.inbox[findIndex].viewed === false) {
-        state.inboxUnReadMails--;
-      }
+      state.inboxUnReadMails--;
       state.inbox[findIndex] = { ...state.inbox[findIndex], viewed: true };
     },
     deleteInboxMail(state, action) {
@@ -91,7 +88,7 @@ const mailsSlice = createSlice({
     },
     deleteSentMail(state, action) {
       state.sentMails = state.sentMails.filter(
-        (mail) => mail.key !== action.payload.key
+        (mail) => mail.key !== action.payload
       );
     },
     clearMailsOnLogout(state) {
