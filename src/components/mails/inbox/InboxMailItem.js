@@ -1,26 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Container } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { mailsSliceActions } from "../../../store/mailsSlice";
 import "./InboxMailItem.css";
 import { useDispatch, useSelector } from "react-redux";
+import useHttpRequest from "../../../hooks/useHttpRequest";
 
 const InboxMailItem = ({ mail }) => {
   const dispatch = useDispatch();
   const userDataEndPoint = useSelector((state) => state.auth.mailId)
     .replace(".", "")
     .replace("@", "");
+
+  const { sendRequest, loading, error } = useHttpRequest();
+
   const mailDeleteHandler = async (key) => {
-    const response = await fetch(
-      `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/inbox/${key}.json`,
-      {
-        method: "DELETE",
-      }
-    );
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log(responseData);
+    try {
+      await sendRequest(
+        `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/inbox/${key}.json`,
+        "DELETE"
+      );
+
       dispatch(mailsSliceActions.deleteInboxMail(key));
+    } catch (error) {
+      console.error("An error occurred while deleting mail:", error);
     }
   };
   return (
@@ -29,6 +32,7 @@ const InboxMailItem = ({ mail }) => {
       <td>
         <Link to={`/inbox/${mail.key}`} className="link-to-mail">
           {mail.subject} <em>{!mail.viewed && "(Unread)"}</em>
+          <em>(click on Subject to View the mail)</em>
         </Link>
       </td>
       <td>

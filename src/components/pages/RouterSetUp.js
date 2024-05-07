@@ -3,11 +3,9 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "react-redux";
 
-import MailComposerPage from "../mails/MailComposer";
 import InboxPage from "./Inbox";
 import SentMailsPage from "./SentMails";
-import InboxMailView from "../mailView/InboxMailView";
-import SentMailView from "../mailView/SentMailView";
+
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 import MailView from "../mailView/MailView";
@@ -26,10 +24,7 @@ const RouterSetUp = () => {
           {!isLoggedin && <Login />}
           {isLoggedin && <Redirect to="/inbox"></Redirect>}
         </Route>
-        <Route path="/mailCompose">
-          {!isLoggedin && <Redirect to="/login"></Redirect>}
-          {isLoggedin && <MailComposerPage />}
-        </Route>
+
         <Route path="/inbox" exact>
           {!isLoggedin && <Redirect to="/login" />}
           {isLoggedin && <InboxPage />}

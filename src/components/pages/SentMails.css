@@ -1,5 +1,3 @@
-/* InboxPage.css */
-
 .sent-mail-box-container {
   width: 100%;
   overflow: hidden;
@@ -39,7 +37,7 @@
 }
 
 .sent-mails-header {
-  background-color: #009688; /* Dark teal */
+  background-color: #009688;
   color: white;
   padding: 20px;
 }

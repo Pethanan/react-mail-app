@@ -1,26 +1,29 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { mailsSliceActions } from "../../../store/mailsSlice";
 import "./SentMailItem.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import useHttpRequest from "../../../hooks/useHttpRequest";
 
 const SentMailItem = ({ mail }) => {
   const dispatch = useDispatch();
   const userDataEndPoint = useSelector((state) => state.auth.mailId)
     .replace(".", "")
     .replace("@", "");
+
+  const { sendRequest, loading, error } = useHttpRequest();
+
   const mailDeleteHandler = async (key) => {
-    const response = await fetch(
-      `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/sentMails/${key}.json`,
-      {
-        method: "DELETE",
-      }
-    );
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log(responseData);
+    try {
+      await sendRequest(
+        `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/sentMails/${key}.json`,
+        "DELETE"
+      );
+
       dispatch(mailsSliceActions.deleteSentMail(key));
+    } catch (error) {
+      console.error("An error occurred while deleting mail:", error);
     }
   };
 
@@ -33,14 +36,21 @@ const SentMailItem = ({ mail }) => {
         </Link>
       </td>
       <td>
-        <Button
-          variant="danger"
-          size="sm"
-          className="inbox-mail-delete-btn"
-          onClick={() => mailDeleteHandler(mail.key)}
-        >
-          Delete
-        </Button>
+        {loading ? (
+          <Spinner animation="border" variant="primary" />
+        ) : (
+          <>
+            <Button
+              variant="danger"
+              size="sm"
+              className="inbox-mail-delete-btn"
+              onClick={() => mailDeleteHandler(mail.key)}
+            >
+              Delete
+            </Button>
+            {error && <p className="error-message">{error}</p>}
+          </>
+        )}
       </td>
     </tr>
   );

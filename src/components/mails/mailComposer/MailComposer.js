@@ -1,14 +1,14 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { ContentState, EditorState, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Button, Container, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { mailsSliceActions } from "../../store/mailsSlice";
-import { convertToRaw } from "draft-js";
+import { mailsSliceActions } from "../../../store/mailsSlice";
+import "./MailComposer.css";
 
-const MailComposer = () => {
+const MailComposer = ({ mailComposerOpenHandler }) => {
   const [loading, setLoading] = useState(true);
   const editorState = EditorState.createEmpty();
   const [mainContentState, setMainContentState] = useState(editorState);
@@ -27,7 +27,6 @@ const MailComposer = () => {
   const mailContentStateChangeHandler = (editorState) => {
     setMainContentState(editorState);
     setContent(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-    console.log(content);
   };
 
   const changeHandler = (e) => {
@@ -37,6 +36,7 @@ const MailComposer = () => {
       content,
     });
   };
+
   const sendMail = async (e) => {
     e.preventDefault();
     try {
@@ -49,7 +49,6 @@ const MailComposer = () => {
       const mailObjStringified = JSON.stringify(mailObj);
       const recvrMailIdToDirectory = mail.receiver.replace(/[@.]/g, "");
 
-      console.log(recvrMailIdToDirectory);
       const responseFromReceiverDB = await fetch(
         `https://peth-mail-app-default-rtdb.firebaseio.com/${recvrMailIdToDirectory}/inbox.json`,
         {
@@ -62,8 +61,6 @@ const MailComposer = () => {
       if (!responseFromReceiverDB.ok) {
         throw new Error("Failed to send mail to receiver.");
       }
-
-      console.log(await responseFromReceiverDB.json());
 
       const SenderMailIdToDirectory = mailId.replace("@", "").replace(".", "");
 
@@ -81,7 +78,6 @@ const MailComposer = () => {
       }
 
       const response = await responseFromSenderDB.json();
-      console.log(response);
 
       const mailwithNameKey = { ...mailObj, key: response.name };
       dispatch(mailsSliceActions.addSentItem(mailwithNameKey));
@@ -97,28 +93,35 @@ const MailComposer = () => {
       console.error("Error sending mail:", error.message);
     }
   };
+
   return (
-    <Form onSubmit={sendMail} style={{ margin: "50px" }}>
-      <h4 style={{ margin: "35px 0" }}>Compose Mail</h4>
+    <Form onSubmit={sendMail} className="mail-composer-form">
+      <Container className="compose-header__container">
+        <h5 className="compose-header">Compose Mail</h5>
+        <Button onClick={mailComposerOpenHandler}>Close X</Button>
+      </Container>
+
       {!loading && (
-        <p style={{ backgroundColor: "green", color: "white" }}>
-          Success : Mail has been sent !
-        </p>
+        <p className="success-message">Success: Mail has been sent!</p>
       )}
-      <Form.Label>To</Form.Label>
-      <Form.Control
-        type="mail"
-        name="receiver"
-        value={mail.receiver}
-        onChange={changeHandler}
-      ></Form.Control>
-      <Form.Label>Subject</Form.Label>
-      <Form.Control
-        type="text"
-        name="subject"
-        value={mail.subject}
-        onChange={changeHandler}
-      ></Form.Control>
+      <Form.Group controlId="formReceiver">
+        <Form.Label>To</Form.Label>
+        <Form.Control
+          type="mail"
+          name="receiver"
+          value={mail.receiver}
+          onChange={changeHandler}
+        />
+      </Form.Group>
+      <Form.Group controlId="formSubject" className="mail-subject">
+        <Form.Label>Subject</Form.Label>
+        <Form.Control
+          type="text"
+          name="subject"
+          value={mail.subject}
+          onChange={changeHandler}
+        />
+      </Form.Group>
 
       <Editor
         editorState={mainContentState}
@@ -126,8 +129,17 @@ const MailComposer = () => {
         wrapperClassName="demo-wrapper"
         editorClassName="demo-editor"
         onEditorStateChange={mailContentStateChangeHandler}
+        editorStyle={{
+          border: "1px solid #000",
+          minHeight: "200px",
+          padding: "10px",
+          borderRadius: "5px",
+          backgroundColor: "#ffffff",
+        }}
       />
-      <Button type="submit">Send</Button>
+      <Button type="submit" className="sendmail-button">
+        Send
+      </Button>
     </Form>
   );
 };

@@ -1,19 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Button,
-  Container,
-  ListGroup,
-  ListGroupItem,
-  Nav,
-} from "react-bootstrap";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, NavLink, useParams } from "react-router-dom";
-import Circle from "../../Circle";
+import { Link, useParams } from "react-router-dom";
 import SideNavBar from "../../layout/SideNavBar";
 import { useDispatch } from "react-redux";
 import { mailsSliceActions } from "../../store/mailsSlice";
 import useHttpRequest from "../../hooks/useHttpRequest";
-import InboxMailList from "../mails/inbox/InboxMailList";
 import "./MailView.css";
 
 const MailView = ({ mailCategory }) => {
@@ -25,22 +16,25 @@ const MailView = ({ mailCategory }) => {
   const userDataEndPoint = useSelector((state) => state.auth.mailId)
     .replace("@", "")
     .replace(".", "");
+
+  const { sendRequest } = useHttpRequest();
+
   useEffect(() => {
     if (mailCategory === "inbox" && mail.viewed === false) {
       const updateMail = async () => {
-        const response = await fetch(
-          `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/inbox/${mail.key}.json`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({ viewed: true }),
-            headers: {
+        try {
+          await sendRequest(
+            `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/inbox/${mail.key}.json`,
+            "PATCH",
+            { viewed: true },
+            {
               "Content-Type": "application/json",
-            },
-          }
-        );
-        const responseData = await response.json();
-        console.log(responseData);
-        dispatch(mailsSliceActions.updateMailViewedStatus(mail.key));
+            }
+          );
+          dispatch(mailsSliceActions.updateMailViewedStatus(mail.key));
+        } catch (error) {
+          console.error("An error occurred while updating mail:", error);
+        }
       };
       updateMail();
     }
@@ -73,8 +67,8 @@ const MailView = ({ mailCategory }) => {
           className="content"
           dangerouslySetInnerHTML={{ __html: mail.content }}
         ></div>
-        <Link to={`/${mailCategory}`} className="link">
-          Back to {mailCategory}
+        <Link to={`/${mailCategory}`} className="link-to-main">
+          Back to {mailCategory.toUpperCase()}
         </Link>
       </div>
     </div>

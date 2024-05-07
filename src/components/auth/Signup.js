@@ -40,7 +40,6 @@ const Signup = (props) => {
       setIsEmailValid(true);
       setIsPwdValid(true);
       setIsConfirmPwdValid(true);
-      console.log("passed here");
       const authResponse = await fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC4Fw8h_EULUmTEFSKu78R6XXnVSFnqtLc",
         {
@@ -56,16 +55,14 @@ const Signup = (props) => {
         }
       );
       const signupAuthResponse = await authResponse.json();
-      console.log(signupAuthResponse);
       const idToken = !!signupAuthResponse.idToken;
-      console.log(idToken);
       if (idToken) {
         const userMailIdToDirectory = mailId.replace("@", "").replace(".", "");
         const responseForInbox = await fetch(
           `https://peth-mail-app-default-rtdb.firebaseio.com/${userMailIdToDirectory}/inbox.json`,
           {
             method: "PUT",
-            body: JSON.stringify({}), // Empty JSON object
+            body: JSON.stringify({}),
             headers: { "Content-type": "application/json" },
           }
         );
@@ -76,17 +73,15 @@ const Signup = (props) => {
           console.error("Failed to create inbox:", responseForInbox.statusText);
         }
 
-        // Create an empty sentMails for the recipient
         const responseForSentMails = await fetch(
           `https://peth-mail-app-default-rtdb.firebaseio.com/${userMailIdToDirectory}/sentMails.json`,
           {
             method: "PUT",
-            body: JSON.stringify({}), // Empty JSON object
+            body: JSON.stringify({}),
             headers: { "Content-Type": "application/json" },
           }
         );
 
-        // Check if sentMails creation was successful
         if (responseForSentMails.ok) {
           console.log("SentMails created successfully");
         } else {

@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authInitialState = {
-  mailId: "",
-  isLoggedin: false,
-  token: null,
+  mailId: sessionStorage.getItem("authObject")
+    ? JSON.parse(sessionStorage.getItem("authObject")).mailId
+    : "",
+  isLoggedin: sessionStorage.getItem("authObject")
+    ? !!JSON.parse(sessionStorage.getItem("authObject")).token
+    : false,
+  token: sessionStorage.getItem("authObject")
+    ? JSON.parse(sessionStorage.getItem("authObject")).token
+    : "",
 };
 
 const authSlice = createSlice({

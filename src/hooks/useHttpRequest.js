@@ -1,31 +1,48 @@
-import React, { useCallback, useState } from "react";
+import { useState } from "react";
 
-const useHttpRequest = (task) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+const useHttpRequest = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
 
-  const sendRequest = useCallback(
-    async (requestConfig) => {
-      setIsLoading(true);
-      const response = await fetch(requestConfig.url, {
-        method: requestConfig.method ? requestConfig.method : "GET",
-        headers: requestConfig.headers ? requestConfig.headers : {},
-        body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
+  const sendRequest = async (
+    url,
+    method = "GET",
+    body = null,
+    headers = {}
+  ) => {
+    setLoading(true);
+    setError(null);
+    setData(null);
+
+    try {
+      const response = await fetch(url, {
+        method,
+        body: body ? JSON.stringify(body) : null,
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
       });
-      const responseData = await response.json();
-      console.log(responseData);
-      if (responseData) {
-        task(responseData);
-        setIsLoading(false);
+
+      if (!response.ok) {
+        throw new Error("Request failed with status " + response.status);
       }
-    },
-    [task]
-  );
+
+      const responseData = await response.json();
+      setData(responseData);
+    } catch (error) {
+      setError(error.message || "Something went wrong!");
+    }
+
+    setLoading(false);
+  };
 
   return {
-    sendRequest,
-    isLoading,
+    loading,
     error,
+    data,
+    sendRequest,
   };
 };
 

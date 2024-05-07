@@ -47,17 +47,24 @@
 
 .content {
   padding: 20px;
+  min-height: 50%;
 }
 
-.link {
+.link-to-main {
   margin-left: 20px;
   padding: 6px 12px;
   background-color: #008080;
   color: white;
   border-radius: 12px;
   text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
 }
-.link:hover {
+.link-to-main:hover {
   background-color: #006060;
   color: white;
+}
+
+.content {
+  border-bottom: 1px solid #006060;
 }

@@ -2,9 +2,9 @@ import React, { useCallback, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { mailsSliceActions } from "../../../store/mailsSlice";
-import useHttpRequest from "../../../hooks/useHttpRequest";
 import SentMailItem from "./SentMailItem";
 import "./SentMailList.css";
+import { fetchSentMailsMiddleware } from "../../../store/middelware/sentMailsMiddleware";
 
 const SentMailList = () => {
   const dispatch = useDispatch();
@@ -14,31 +14,9 @@ const SentMailList = () => {
     ? userMailId.replace("@", "").replace(".", "")
     : "";
 
-  const dispatchSentMails = useCallback(
-    (fetchedSentMails) => {
-      const sentMailsArray = [];
-
-      Object.keys(fetchedSentMails).forEach((key) => {
-        const mailItem = { ...fetchedSentMails[key], key: key };
-        sentMailsArray.push(mailItem);
-      });
-
-      dispatch(mailsSliceActions.retrieveSentMailsFromBackEnd(sentMailsArray));
-    },
-    [mailsSliceActions]
-  );
-
-  const {
-    isLoading,
-    error,
-    sendRequest: fetchSentMails,
-  } = useHttpRequest(dispatchSentMails);
-
   useEffect(() => {
-    fetchSentMails({
-      url: `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/sentMails.json`,
-    });
-  }, [fetchSentMails]);
+    dispatch(fetchSentMailsMiddleware(userDataEndPoint));
+  }, [dispatch, fetchSentMailsMiddleware, userDataEndPoint]);
 
   const mailDeleteHandler = async (mail) => {
     const response = await fetch(
@@ -49,7 +27,6 @@ const SentMailList = () => {
     );
     if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData);
       dispatch(mailsSliceActions.deleteSentMail(mail.key));
     }
   };
@@ -59,7 +36,9 @@ const SentMailList = () => {
       <thead>
         <tr>
           <th>To</th>
-          <th>Subject</th>
+          <th>
+            Subject <em>(click on Subject to View the mail)</em>
+          </th>
           <th>Action</th>
         </tr>
       </thead>

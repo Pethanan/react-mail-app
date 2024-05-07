@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { mailsSliceActions } from "../../../store/mailsSlice";
-import useHttpRequest from "../../../hooks/useHttpRequest";
 import InboxMailItem from "./InboxMailItem";
 import "./InboxMailList.css";
+import { fetchInboxMailsMiddleware } from "../../../store/middelware/inboxMiddleware";
 
 const InboxMailList = () => {
   const dispatch = useDispatch();
@@ -12,28 +12,16 @@ const InboxMailList = () => {
   const userMailId = useSelector((state) => state.auth.mailId);
   const userDataEndPoint = userMailId.replace("@", "").replace(".", "");
 
-  const dispatchInboxMails = useCallback(
-    (fetchedInboxMails) => {
-      const inboxMailsArray = [];
-      Object.keys(fetchedInboxMails).forEach((key) => {
-        const inboxItem = { ...fetchedInboxMails[key], key: key };
-        inboxMailsArray.push(inboxItem);
-      });
-      dispatch(mailsSliceActions.retrieveInboxFromBackEnd(inboxMailsArray));
-    },
-    [dispatch]
-  );
-
-  const { sendRequest: fetchInboxMails } = useHttpRequest(dispatchInboxMails);
+  useEffect(() => {
+    dispatch(fetchInboxMailsMiddleware(userDataEndPoint));
+  }, []);
 
   useEffect(() => {
-    const timeInterval = setInterval(() => {
-      fetchInboxMails({
-        url: `https://peth-mail-app-default-rtdb.firebaseio.com/${userDataEndPoint}/inbox.json`,
-      });
-    }, 1200);
-    return () => clearInterval(timeInterval);
-  }, [userDataEndPoint, fetchInboxMails]);
+    const intervalId = setInterval(() => {
+      dispatch(fetchInboxMailsMiddleware(userDataEndPoint));
+    }, 20000);
+    return () => clearInterval(intervalId);
+  }, [dispatch, userDataEndPoint]);
 
   const mailDeleteHandler = async (mail) => {
     const response = await fetch(
@@ -41,7 +29,6 @@ const InboxMailList = () => {
       { method: "DELETE" }
     );
     const responseData = await response.json();
-    console.log(responseData);
     dispatch(mailsSliceActions.deleteInboxMail(mail.key));
   };
 
@@ -50,7 +37,9 @@ const InboxMailList = () => {
       <thead>
         <tr>
           <th>From</th>
-          <th>Subject</th>
+          <th>
+            Subject <em>(click on Subject to View the mail)</em>
+          </th>
           <th>Action</th>
         </tr>
       </thead>

@@ -1,5 +1,3 @@
-/* SideNavBar.css */
-
 .side-nav-container {
   width: 250px;
   height: 100%;
@@ -39,6 +37,7 @@
   text-decoration: none;
   transition: all 0.3s ease;
   border-radius: 5px;
+  font-weight: bolder;
 }
 
 .nav-link:hover,
@@ -60,4 +59,32 @@
 
 .logout-button:hover {
   background-color: #c0392b;
+}
+
+.mail-composer__container {
+  position: fixed;
+  width: 50%;
+  bottom: 0;
+  right: 0;
+}
+
+.compose-btn__container button {
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  background-color: #006060;
+  font-weight: bolder;
+  border: none;
+}
+
+.compose-btn__container button:hover {
+  background-color: #008080;
+}
+
+.compose-btn__container {
+  margin-bottom: 10px;
+  border-radius: 5px;
 }

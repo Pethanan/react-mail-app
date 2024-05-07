@@ -37,6 +37,8 @@ const Login = (props) => {
       console.log(authData.idToken);
       const payLoad = { mailId: enteredMailId, token: authData.idToken };
       dispatch(authActions.login(payLoad));
+      const authObject = { mailId: enteredMailId, token: authData.idToken };
+      sessionStorage.setItem("authObject", JSON.stringify(authObject));
       alert("Login successful!");
     } else {
       alert(

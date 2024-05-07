@@ -1,0 +1,39 @@
+.mail-composer-form {
+  width: 50%;
+  max-width: 600px;
+  color: black;
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  z-index: 20;
+  background-color: rgb(183, 221, 221);
+  padding: 10px;
+  border-radius: 10px 15px;
+}
+
+.sendmail-button {
+  margin-top: 10px;
+  background-color: teal !important;
+  border: none !important;
+}
+
+.sendmail-button:hover {
+  background-color: rgb(1, 68, 68) !important;
+}
+
+.success-message {
+  background-color: green;
+  color: white;
+  padding: 10px;
+}
+
+.mail-subject {
+  margin: 15px 0;
+}
+
+.compose-header__container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 !important;
+  margin: 0 !important;
+}

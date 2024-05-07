@@ -30,17 +30,17 @@
 }
 .login-button {
   margin-top: 20px;
-  background-color: #006060;
+  background-color: #006060 !important;
   padding: 5px 15px;
   border-radius: 10px;
-  border: none;
+  border: none !important;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .login-button:hover {
-  background-color: #012929;
+  background-color: #012929 !important;
 }
 
 .link {
